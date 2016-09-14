@@ -1,0 +1,285 @@
+README file for Programming Assignment 4 (Java edition)
+======================================================
+
+Your directory should now contain the following files:
+
+ ASTConstants.java    -> [class dir]/src/PA4J/ASTConstants.java
+ ASTLexer.java	      -> [class dir]/src/PA4J/ASTLexer.java
+ ASTParser.java	      -> [class dir]/src/PA4J/ASTParser.java
+ AbstractSymbol.java  -> [class dir]/src/PA4J/AbstractSymbol.java
+ AbstractTable.java   -> [class dir]/src/PA4J/AbstractTable.java
+ BoolConst.java       -> [course dir]/src/PA3J/BoolConst.java
+ ClassTable.java
+ Flags.java	      -> [class dir]/src/PA4J/Flags.java
+ IdSymbol.java	      -> [class dir]/src/PA4J/IdSymbol.java
+ IdTable.java	      -> [class dir]/src/PA4J/IdTable.java
+ IntSymbol.java	      -> [class dir]/src/PA4J/IntSymbol.java
+ IntTable.java	      -> [class dir]/src/PA4J/IntTable.java
+ ListNode.java	      -> [class dir]/src/PA4J/ListNode.java
+ Makefile	      -> [class dir]/etc/../assignments/PA4J/Makefile
+ README
+ Semant.java	      -> [class dir]/src/PA4J/Semant.java
+ StringSymbol.java    -> [class dir]/src/PA4J/StringSymbol.java
+ StringTable.java     -> [class dir]/src/PA4J/StringTable.java
+ SymbolTable.java     -> [class dir]/src/PA4J/SymbolTable.java
+ SymtabExample.java   -> [class dir]/src/PA4J/SymtabExample.java
+ TokenConstants.java  -> [class dir]/src/PA4J/TokenConstants.java
+ TreeConstants.java
+ TreeNode.java	      -> [class dir]/src/PA4J/TreeNode.java
+ Utilities.java	      -> [class dir]/src/PA4J/Utilities.java
+ bad.cl
+ cool-tree.aps	      -> [class dir]/src/PA4J/cool-tree.aps
+ cool-tree.java
+ compare-semant
+ good.cl
+
+	The build.xml contains targets for compiling and running your
+	program. DO NOT MODIFY.
+
+	The README contains this info. Part of the assignment is to fill
+	the README with the write-up for your project. You should
+	explain design decisions, explain why your code is correct, and
+	why your test cases are adequate. It is part of the assignment
+	to clearly and concisely explain things in text as well as to
+	comment your code.  EDIT AND SUBMIT.
+
+	good.cl and bad.cl test a few features of the semantic checker.
+	You should add tests to ensure that good.cl exercises as many
+	legal semantic combinations as possible and that bad.cl
+	exercises as many kinds of semantic errors as possible.
+        EDIT AND SUBMIT.
+
+	cool-tree.aps contains the definitions for the tree language
+	which you use to construct the abstract syntax tree (AST). This
+	file is provided for your reference.  DO NOT MODIFY.
+
+        TreeNode.java and ListNode.java contain definitions used by the
+        tree package. DO NOT MODIFY.  
+
+        cool-tree.java specifies and gives an implementation of Cool ASTs
+        (see the README for PA3 and the "Cool Tour").  In this
+        assignment, you will need to add functions to the AST classes to
+        store, fetch, and compute information about the AST.
+
+   	You should NOT remove any definitions that are already present
+   	in cool-tree.java.  These function and data members are required
+   	for the system to function properly.
+
+        You should add any fields and methods to the classes you need to
+        perform semantic analysis.  You will need to add, for example,
+        methods which traverse the expressions of the tree and implement
+        the type-checking rules.  The entry point to the semantic
+        analyzer is program.semant().  EDIT AND SUBMIT cool-tree.java.
+
+	ClassTable.java implements a placeholder class for a few useful
+	methods.  Feel free to extend it to implement some real data
+	strucutre.
+
+	TreeConstants.java defined some useful symbol constants.  You
+	may add some of your own, if you wish.
+
+	ASTLexer.java, ASTParser.java, and ASTConstants.java implement a
+	lexer and a parser for reading text representation of ASTs from
+	console in the format produced by the parser phase. DO NOT
+	MODIFY.
+
+        Semant.java contains a driver to test the analyzer.  The main
+        method reads an AST in text form from standard input, parses it,
+        and then produces a type-annotated AST on standard output.  The
+        script mycoolc can pass any of the standard flags to the
+        semantic analyzer as well; for this assignment, -s (semantic
+        analysis debug) may be useful as it sets a static variable
+        Flags.semant_debug to "true".  If you want your semantic checker
+        to print debug information when the option is set, write your
+        debug code in the following format:
+
+	      if (Flags.semant_debug)
+	      {
+		...
+	      }
+
+	semant_debug is provided as a convenience. You don't need to use
+	the debugging flags if you don't want to. DON'T MODIFY
+	Semant.java
+
+	SymbolTable.java contains a symbol table implementation. Read
+	the comments in the file and look at the example in
+	SymtabExample.java.  You are not required to use this code, but
+	you may find it useful. DO NOT MODIFY.
+
+Instructions
+------------
+
+	To compile the example use of the symbol table, type
+
+	% ant symtab-example
+
+	This creates a shell script to run the symbol table example.
+
+	To compile your semantic analyzer program type:
+
+	% ant semant
+
+	To test your semantic checker, type:
+
+	% ./mysemant foo.cl
+
+	mysemant is a version of mycoolc that omits code generation.
+	mysemant parses all the cool files given on the command line and
+	builds a single abstract syntax tree containing all class
+	definitions appearing in the input files. Your semantic checker
+	is then called on this abstract syntax tree.  If there are no
+	errors, the program produces a type-annotated abstract syntax
+	tree as output.
+
+        To run the reference semantics analysisr on a file 'fool.cl':
+
+        % ./ref-semant foo.cl
+
+        To easily compare your implementation and the reference :
+
+        % compare-semant foo.cl
+
+        To run your checker on the files good.cl and bad.cl type:
+
+	% ant test
+
+        To run ten examples in tests directory type:
+
+        % ant test-all
+
+	If you think your semantic checker is correct and behaves like
+	the one we wrote, you can try to run mycoolc using your checker,
+	your parser and also your lexical analyzer if you choose (see
+	below for instructions).  Remember if your lexer, parser or
+	checker behaves in an unexpected manner, you may get errors
+	anywhere.
+
+	To turn in your work type:
+        
+        % ant submit-clean
+        % submit PA4
+        
+	Be sure to submit the files cool-tree.java,
+	ClassTable.java, TreeConstants.java, good.cl, bad.cl,
+	good.output, bad.output, and README. Don't forget to edit the
+	README file to include your write-up, and to write your own test
+	cases in good.cl and bad.cl.
+
+ 	You may turn in the assignment as many times as you like.
+ 	However, only the last version will be retained for grading.
+
+	GOOD LUCK!
+
+---8<------8<------8<------8<---cut here---8<------8<------8<------8<---
+
+Write-up for PA4
+----------------
+
+ClassTable:
+	Added the methods:
+		commonParent, which takes in 2 classes, and returns the "least" common parent, i.e. the common parent that's lowest on the inheritance graph.
+		isSubClass, which takes in 2 classes (and what SELF_CLASS should evaluate to), and returns true if the 2nd class is equal to or the child of the first class.
+		getParent, which takes in a class, and returns the parent class.
+		existsClass, which takes in a class, and checks if it's definied in our inheritance graph.
+	Filled out ClassTable:
+		The idea is simple step-by-step procedure. First we initialize an empty inheritance graph (represented by a table hashMap), and insert the basic classes into it. Then in the first pass of our classes, for each class c, we make sure there doesn't already exist a class with the same name in the graph, insert c into the graph, make sure c does not inherit from Int, Bool, or Str, and check if inserting c created an inheritance loop (this is done by traversing up c's ancestors until we reach either Object, or c again). Then in the second pass, for each class, we make sure it's parent exists in the graph, i.e., we check for missing inheritnace. And lastly, we traverse the classes one last time, to make sure we have a class called Main. Once we find this class, we traverse it's methods and make sure it has no more nor less than 1 main method, which must not take in any paramters.
+		
+cool-tree.java
+	Filling Symbol Tables (pass 1)
+		First, we create empty symbol tables. Class Table is filled out as we described above. Then, we traverse each class c, and for each, we create 2 hashmaps, one for it's methods mapping the method name to the method, and another for it's attributes, mapping the attribute to the attribute type. We then insert these into our method and variable tables respectivley, with the class c as the key.
+	Checking Tables (pass 2)
+		We then do some basic checking on those tables we filled. Such as making sure child classes don't try to use same attribute names as any of their ancestors have. And making sure if a child has a method of the same name as one of its ancestors, then the 2 methods must share the same signatures. And make sure methods dont use duplicate names for parameters, dont have paramenters of type SELF_TYPE, and all parameter types exist.
+	Traversing Tree's (pass 3)
+		Traversal and Scope
+			To beginour tree traversal, we begin with a simple linear traversal of each class. For each class c, we enter a new scope, into which we add all the attributes and mehods of class c and c's ancestors. We then linearly traverse it's features. For attribute features, we simply verify the attribute type exists, and that if an initializing assignment is made, that it is of that type. For method attributes, we first verify the method's return type exists, then add into our scope the method's paramters, semantic check the expression body, and finally make sure to leave the method scope (with the method parameters). After traversing each of c's features in such a way, we make sure to leave c's scope as well, before moving on to the next class.
+		More on Scope
+			The only other places we have to further modify the current scope, is during let expressions, case expressions, and dispatches. Let's in that we simply add the let's left part variable declaration to the scope after type checking it's initialization (if an initialization was provided) but before moving on to type checking it's body. Case's we likewise, before evaluating each branch, we create a new scope and add the branch's left hand declaration to the current scope, and we leave that scope once we finish that branch clause. And for dispatches, after finsihing type checking the left-hand and parameters, we simply enter a new scope, add into the scope the parameters, type check the method body, and then leave the scope.
+	Semanting Expressions
+		Overview
+			Expressions are traversed recurseively. As in, for the expression "x <- 3+2", we begin by type checking the entire expression, but we will need to type check "3+2" before we can complete the type check of the entire expression. This is achieved by having each expression take care of it's own semantic check. In other words, each expression is told to evaluate it's own type, and stores its own type. Sub expressions withen a parent expression will be required to evaluate and store their types as the parent is trying to compute its own type. Each type of expression has its own semantic method defined, which adheres to the cool manual.
+		Assignment
+			We simply make sure the variable is declared, and that the value expresion evalutes to the same type (or sub-type) as the variable's declared type. We set the type of the assignment to the variable type.
+		Dispatch
+			Some details that were described above are left out here. We evaluate the types of the parameters, determine the method to be dispatched, check for mathcing number and type of parameters as the method is defined to accept, evaluate type of the method body, and make sure the body evlautes to the same type as the method is supposed to return. We set the type of the dispatch to the return type of the method.
+		If and While
+			We make sure the predicate is boolean and evaluate types of the then/else clauses for if's and the body for while's. For if's we then set the type of the if to the least common parent of the then and else clause types. For while's we set the type to Object.
+		Cases
+			We iterate through the branches, make sure no 2 or more branches share the same type for the predicate (i.e. case x of x:Int=>expr; y:Int=>expr; esac : is not allowed since both branches share the Int type of predicate). Then we check that each branch's type of predicate is a defined type. Then as described above, we evalute each branches in their local scopes which includes for each branch that branch's assignment. And lastly set the type of the case expression to the least common parent of all the branch types.
+		Block
+			We iterate and evalute the type of each expression in the block. In the end, we set the type of the block to the type of the last expression in the block.
+		Let
+			We eavluate type of the initialization in the assignment, if an initialization is provided. Then make sure the type declared for the assignment is an existing type, and a supperclass of the type of the initialization. Then as described aboev, modify the scope for the let body, in which we then evaluate the body and set the let expressions type to the body's type.
+		+, -, *, / Operators
+			We simply evaluate the type of each side expression, and check that both side expressions are of type Int. Then set the operator's type to Int as well.
+		Negate
+			Similar to operators, we compute type of expression, make sure it's an integer, and set negations type to integer.
+		< and <= Comparators
+			Similar to operators, we evaluate the type of both side-expressions, make sure they're both integers, and set the comparotor's type to boolean.
+		= equality
+			We evaluate the types of both side expressions. Make sure that if either is an int, bool, or str, that they other must be the same type. And then set the equality's type to boolean.
+		Not, Comp
+			We evaluate the type of the expression and make sure it is a boolean, and then set the type of the comp to boolean.
+		Constants
+			We set the constants type to the appropiate type in each case; i.e, integer, boolean, or string.
+		New
+			We verify the type given exists, and then set the new expression's type to that type.
+		Isvoid, no_expr
+			Simply set the isvoid expression's type to boolean, and no_expr's type to No_type.
+		Object
+			We simply set the expression's type to the type of the object.
+			
+	Test Cases (myGood.cl and mybad.cl)
+		Note
+			Note that good.cl and bad.cl is a concatenation of many individual bad tests I tested. In other words, it's messy to look at the output as a whole. Moreover, bad.cl contains multiple tests that cause the checker to halt. Therefore, very few of the test cases will be seen by simply running ./mysemant bad.cl, the tests not being tested should be commented out so the other tests can be seen.
+		What's Tested In bad.cl
+			Main
+				Lack of main class
+				Lack of main method
+				Multiple main methods
+				Main method acceting parameters
+			Inheritance:
+				Inheriting from non-existant classes
+				Overriding inherrited attributes
+				Overriding methods with new return types
+				Overriding methods with different number of or type of actuals (or both)
+				Multiple attribute and method definitions within a class
+				Multiple class definitions
+				Inheritance from basic classes
+				Inheritance Loops
+			Method Signatures
+				Methods returning non-existant types
+				Methods accepting parameters of non-existant types
+				Methods accepting parameters of SELF_TYPE
+				Methods having multiple parameters of the same name
+			Attribute
+				Declaring attribues of non-existant types
+			Expressions
+				Assignment of wrong types (both in methods and attribute initializations and elsewhere)
+				Testing if and while expressions with non-boolean predicates
+				Testing case expression branch scoping
+				Testing case with branch types of non-defined types
+				Testing case with multiple branches of the same type
+			Operators
+				Testing the operators with wrong type's of left/right hand expressions
+			Method
+				Returning the wrong type
+			Let
+				Testing let scoping
+				Testing trying to use undefined types in let assignments
+				Assigning an expression of mismatching type in a let assignment
+			New
+				New with undefined type				
+			
+		What's Tested in good.cl
+			Basicly the opposite of everything above. Ther's a proper main class, proper inheritance graph, proper expressions and types and etc. Basicly good.cl contains a good main class and main method, all method signatures are proper (no duplicate names, no SELF_TYPE's, non non-existant parameter types), methods return proper types, all method overwrites are done correctly, all expressions proplery typed, semi-complicated yet correct inheritances, all used types declared, testing proper inheritance of features, proper scoping, etc. I included multiple "trick" cases; for example, having a case with branches that evaluate to type B and C, as the last expression of an expression block making up the body of a method of return type A, where A>B>C.
+		
+ant semant
+./mysemant foo.cl
+./ref-semant foo.cl
+compare-semant foo.cl
+% ant test-all
+% ant submit-clean
+% submit PA4
+
+This assignment is 2 hour late, this is the first 2 of my 100 late hours i'm using.

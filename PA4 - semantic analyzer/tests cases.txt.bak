@@ -1,0 +1,231 @@
+Class A{ a: Int;};
+
+Class B inherits A{
+	cat():Int{
+		a
+	};
+};
+
+
+Class Main {
+	main():Int{
+		1
+	};
+};
+
+
+
+
+
+
+
+Class B {
+
+	a : SELF_TYPE;	
+
+	cat(): SELF_TYPE{
+		a
+	};
+};
+
+class BB inherits B{
+
+
+};
+
+
+Class Main {
+	main():Int{
+		1
+	};
+};
+
+
+
+
+
+Class B {
+	x: Object;
+	cat(): Object{
+		case x of
+			y: B	=> 3;
+			z: B	=>"asf";
+			z: C	=>"asf";
+			z: B	=>"asf";
+			i: Int	=>3+2;
+		esac
+	};
+};
+
+
+Class Main {
+	main():Int{
+		1
+	};
+};
+
+
+
+
+
+
+Class A{};
+
+
+Class B inherits A{
+	x: Object;
+	cat(): Object{
+		case e of
+			y: B	=> new B;
+			i: Int	=>new A;
+		esac
+	};
+};
+
+
+Class Main {
+	main():Int{
+		1
+	};
+};
+
+
+
+
+
+
+
+Class A{};
+
+
+Class B inherits A{
+	x: Int;
+	cat(): Object{{
+		
+		let x:String <-"af" in x;
+		3+2;
+	}};
+};
+
+
+Class Main {
+	main():Int{
+		1
+	};
+};
+
+
+
+
+
+
+
+
+
+Class A{};
+
+
+Class B inherits A{
+	x: Int;
+	cat(): Object{{
+		
+		let x:String <-"af" in x<-3;
+		3+2;
+	}};
+};
+
+
+Class Main {
+	main():Int{
+		1
+	};
+};
+
+
+
+
+Class A{};
+
+
+Class B inherits A{
+	x: Int;
+	cat(): Object{{
+		
+		1+let x:A <-new B in 3;
+		3+2;
+	}};
+};
+
+
+Class Main {
+	main():Int{
+		1
+	};
+};
+
+
+
+
+
+Class A{};
+
+
+Class B inherits A{
+	x: String;
+	cat(): Object{{
+		
+		1+let x:Int in x<-3;
+		3+2;
+	}};
+};
+
+
+Class Main {
+	main():Int{
+		1
+	};
+};
+
+
+
+
+
+Class Main {
+
+	main(x:Int):Int{
+		1
+	};
+
+	main(x:Int):Int{
+		1
+	};
+};
+
+
+
+
+Class Main {
+	x : SELF_TYPE;
+
+	dog():String{"a"};
+
+	main():SELF_TYPE{
+		let x: SELF_TYPE in x
+	};
+};
+
+
+
+
+
+Class B {
+
+	cat(x:Int):SELF_TYPE{self};
+
+};
+
+Class Main inherits B{
+	main():B{
+		cat(1)
+	};
+};
