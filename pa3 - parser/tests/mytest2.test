@@ -1,0 +1,30 @@
+class Let_Test {
+	let_test() : Let_Test{{
+		let x:Int, y:Int in x;
+	}};
+};
+
+
+
+class Hello {
+	body():Body{{
+		let x:Int, y:Int in x;
+		
+		case 3 of
+			x:X=>3;
+			y:Y=>z+y;
+			x:Y=>(2*2+9<3);
+			z:Z=>{3;1;4;5;1;3;5;5;2;4;};
+		esac;
+		
+		while 3=3 loop  
+			case 3 of
+				x:X=>let x:Int, y:Int in x;
+				y:Y=>if z+y then z else y fi;
+				x:Y=>new X;
+				z:Z=>isvoid x;
+			esac
+		pool;
+	}};
+};
+

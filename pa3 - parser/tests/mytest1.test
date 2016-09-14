@@ -1,0 +1,40 @@
+class Hello {
+	hello : Hello <- "Hello";
+	hello():Hello{hello <- "Hello"};
+	hello : Hello <- "Hello";
+	hello(hello:Hello, hello:Hello, hello:Hello):Hello{hello <- "Hello"};
+	hello : Hello <- "Hello";
+	hello():Hello{"Hello"};
+	hello : Hello <- "Hello";
+	hello : Hello <- "Hello";
+	hello():Hello{not hello};
+	hello : Hello <- "Hello";
+};
+
+class Hello {
+	hello : Hello <- "Hello";
+	hello():Hello{hello <- "Hello"};
+	hello : Hello <- "Hello";
+	hello(hello:Hello, hello:Hello, hello:Hello):Hello{hello <- "Hello"};
+	hello : Hello <- "Hello";
+	hello():Hello{"Hello"};
+	hello : Hello <- "Hello";
+	hello : Hello <- "Hello";
+	hello():Hello{not hello};
+	hello : Hello <- "Hello";
+};
+
+class Hello {}; class Hello {}; class Hello {};
+
+class Expr {
+	expr : Expr <- "Expr";
+	expr():Expr{expr <- "Expr"};
+	expr : Expr <- "Expr";
+	expr(expr:Expr, expr:Expr, expr:Expr):Expr{expr <- "Expr"};
+	expr : Expr <- "Expr";
+	expr():Expr{"Expr"};
+	expr : Expr <- "Expr";
+	expr : Expr <- "Expr";
+	expr():Expr{not expr};
+	expr : Expr <- "Expr";
+};
