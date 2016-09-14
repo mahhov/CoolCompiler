@@ -79,7 +79,7 @@ The implementation details from each section's readme have been copy pasted belo
  * Comments
 	* We thourouglhy test everything specified. The description of our tests and which lines of mytest.cl are testing which details is at the top of mytest.cl. But to summarize, tests 1, 7, 13, and 14 test that block comments can extend multiple lines, nest and unest propperly, and that we return errors when encountering an EOF mid-block-comment. Test 15 makes sure emtpy block comments, and a mix and match of different *'s, )'s, ('s, and white spaces do not confuse the lexer. Test 5, in comparison, deals with line comments, and makes sure they are termintead with new lines. Lastly, test 16 makes sure an unmatched *) is properly reported as an error. EoF mid-block-comments were also tested, but removed from test.cl since they would require the test.cl to end immediatly after.
  * Strings
-	* Test 2 tests a simple string, while 3 and 4 make sure new lines in strings with and without escapes are handled properly. Test 9 then tests an assortmet of \'s, white spaces, and other character combinations within strings and makes sure they are all properly handled by the lexer. Test 10 makes sure the null character in a string is reported as an error, but that the two-character substring "\0" is not. Lastly, tests 11 and 12 not only makes sure too-long strings are properly reported as errors, but multipe-error string are also reported appropriately (e.g. a too long string that is unterminated should return the both respective errors with proper line numbers). Also, as with comments, EoF mid-strings were  tested, but removed from test.cl since they would require the test.cl to end immediatly after. EoF mid-string error in combination with too-long string and null-char error all within the same string was also tested.
+	* Test 2 tests a simple string, while 3 and 4 make sure new lines in strings with and without escapes are handled properly. Test 9 then tests an assortmet of \'s, white spaces, and other character combinations within strings and makes sure they are all properly handled by the lexer. Test 10 makes sure the null character in a string is reported as an error, but that the two-character substring "\0" is not. Lastly, tests 11 and 12 not only makes sure too-long strings are properly reported as errors, but multipe-error string are also reported appropriately (e.g. a too long string that is unterminated should return the both respective errors with proper line numbers). Also, as with comments, EoF mid-strings were	tested, but removed from test.cl since they would require the test.cl to end immediatly after. EoF mid-string error in combination with too-long string and null-char error all within the same string was also tested.
  * Others
 	* Test 6 makes sure recognized tokens are properly reported. Test 8 makes sure type identifiers, object identifiers, keywords, and booleans are all properly distinguished, (i.e. else is a keyword, elsee is a object identifier, fAlse is a boolean, False is a type identifier, etc.). Test 11 also makes sure too long integers don't report errors. While test 17 makes sure that all keywords are properly matched.
 	
@@ -104,103 +104,102 @@ The implementation details from each section's readme have been copy pasted belo
 ## SEMANTICS
 * ClassTable:
  * Added the methods:
-  * commonParent, which takes in 2 classes, and returns the "least" common parent, i.e. the common parent that's lowest on the inheritance graph.
-  * isSubClass, which takes in 2 classes (and what SELF_CLASS should evaluate to), and returns true if the 2nd class is equal to or the child of the first class.
-  * getParent, which takes in a class, and returns the parent class.
-  * existsClass, which takes in a class, and checks if it's definied in our inheritance graph.
+	* commonParent, which takes in 2 classes, and returns the "least" common parent, i.e. the common parent that's lowest on the inheritance graph.
+	* isSubClass, which takes in 2 classes (and what SELF_CLASS should evaluate to), and returns true if the 2nd class is equal to or the child of the first class.
+	* getParent, which takes in a class, and returns the parent class.
+	* existsClass, which takes in a class, and checks if it's definied in our inheritance graph.
  * Filled out ClassTable:
-  * The idea is simple step-by-step procedure. First we initialize an empty inheritance graph (represented by a table hashMap), and insert the basic classes into it. Then in the first pass of our classes, for each class c, we make sure there doesn't already exist a class with the same name in the graph, insert c into the graph, make sure c does not inherit from Int, Bool, or Str, and check if inserting c created an inheritance loop (this is done by traversing up c's ancestors until we reach either Object, or c again). Then in the second pass, for each class, we make sure it's parent exists in the graph, i.e., we check for missing inheritnace. And lastly, we traverse the classes one last time, to make sure we have a class called Main. Once we find this class, we traverse it's methods and make sure it has no more nor less than 1 main method, which must not take in any paramters.
-  * 
+	* The idea is simple step-by-step procedure. First we initialize an empty inheritance graph (represented by a table hashMap), and insert the basic classes into it. Then in the first pass of our classes, for each class c, we make sure there doesn't already exist a class with the same name in the graph, insert c into the graph, make sure c does not inherit from Int, Bool, or Str, and check if inserting c created an inheritance loop (this is done by traversing up c's ancestors until we reach either Object, or c again). Then in the second pass, for each class, we make sure it's parent exists in the graph, i.e., we check for missing inheritnace. And lastly, we traverse the classes one last time, to make sure we have a class called Main. Once we find this class, we traverse it's methods and make sure it has no more nor less than 1 main method, which must not take in any paramters.
 * cool-tree.java
  * Filling Symbol Tables (pass 1)
-  * First, we create empty symbol tables. Class Table is filled out as we described above. Then, we traverse each class c, and for each, we create 2 hashmaps, one for it's methods mapping the method name to the method, and another for it's attributes, mapping the attribute to the attribute type. We then insert these into our method and variable tables respectivley, with the class c as the key.
+	* First, we create empty symbol tables. Class Table is filled out as we described above. Then, we traverse each class c, and for each, we create 2 hashmaps, one for it's methods mapping the method name to the method, and another for it's attributes, mapping the attribute to the attribute type. We then insert these into our method and variable tables respectivley, with the class c as the key.
  * Checking Tables (pass 2)
-  * We then do some basic checking on those tables we filled. Such as making sure child classes don't try to use same attribute names as any of their ancestors have. And making sure if a child has a method of the same name as one of its ancestors, then the 2 methods must share the same signatures. And make sure methods dont use duplicate names for parameters, dont have paramenters of type SELF_TYPE, and all parameter types exist.
+	* We then do some basic checking on those tables we filled. Such as making sure child classes don't try to use same attribute names as any of their ancestors have. And making sure if a child has a method of the same name as one of its ancestors, then the 2 methods must share the same signatures. And make sure methods dont use duplicate names for parameters, dont have paramenters of type SELF_TYPE, and all parameter types exist.
  * Traversing Tree's (pass 3)
-  * Traversal and Scope
-   * To beginour tree traversal, we begin with a simple linear traversal of each class. For each class c, we enter a new scope, into which we add all the attributes and mehods of class c and c's ancestors. We then linearly traverse it's features. For attribute features, we simply verify the attribute type exists, and that if an initializing assignment is made, that it is of that type. For method attributes, we first verify the method's return type exists, then add into our scope the method's paramters, semantic check the expression body, and finally make sure to leave the method scope (with the method parameters). After traversing each of c's features in such a way, we make sure to leave c's scope as well, before moving on to the next class.
-  * More on Scope
-   * The only other places we have to further modify the current scope, is during let expressions, case expressions, and dispatches. Let's in that we simply add the let's left part variable declaration to the scope after type checking it's initialization (if an initialization was provided) but before moving on to type checking it's body. Case's we likewise, before evaluating each branch, we create a new scope and add the branch's left hand declaration to the current scope, and we leave that scope once we finish that branch clause. And for dispatches, after finsihing type checking the left-hand and parameters, we simply enter a new scope, add into the scope the parameters, type check the method body, and then leave the scope.
+	* Traversal and Scope
+		* To beginour tree traversal, we begin with a simple linear traversal of each class. For each class c, we enter a new scope, into which we add all the attributes and mehods of class c and c's ancestors. We then linearly traverse it's features. For attribute features, we simply verify the attribute type exists, and that if an initializing assignment is made, that it is of that type. For method attributes, we first verify the method's return type exists, then add into our scope the method's paramters, semantic check the expression body, and finally make sure to leave the method scope (with the method parameters). After traversing each of c's features in such a way, we make sure to leave c's scope as well, before moving on to the next class.
+	* More on Scope
+		* The only other places we have to further modify the current scope, is during let expressions, case expressions, and dispatches. Let's in that we simply add the let's left part variable declaration to the scope after type checking it's initialization (if an initialization was provided) but before moving on to type checking it's body. Case's we likewise, before evaluating each branch, we create a new scope and add the branch's left hand declaration to the current scope, and we leave that scope once we finish that branch clause. And for dispatches, after finsihing type checking the left-hand and parameters, we simply enter a new scope, add into the scope the parameters, type check the method body, and then leave the scope.
  * Semanting Expressions
-  * Overview
-   * Expressions are traversed recurseively. As in, for the expression "x <- 3+2", we begin by type checking the entire expression, but we will need to type check "3+2" before we can complete the type check of the entire expression. This is achieved by having each expression take care of it's own semantic check. In other words, each expression is told to evaluate it's own type, and stores its own type. Sub expressions withen a parent expression will be required to evaluate and store their types as the parent is trying to compute its own type. Each type of expression has its own semantic method defined, which adheres to the cool manual.
-  * Assignment
-   * We simply make sure the variable is declared, and that the value expresion evalutes to the same type (or sub-type) as the variable's declared type. We set the type of the assignment to the variable type.
-  * Dispatch
-   * Some details that were described above are left out here. We evaluate the types of the parameters, determine the method to be dispatched, check for mathcing number and type of parameters as the method is defined to accept, evaluate type of the method body, and make sure the body evlautes to the same type as the method is supposed to return. We set the type of the dispatch to the return type of the method.
-  * If and While
-   * We make sure the predicate is boolean and evaluate types of the then/else clauses for if's and the body for while's. For if's we then set the type of the if to the least common parent of the then and else clause types. For while's we set the type to Object.
-  * Cases
-   * We iterate through the branches, make sure no 2 or more branches share the same type for the predicate (i.e. case x of x:Int=>expr; y:Int=>expr; esac : is not allowed since both branches share the Int type of predicate). Then we check that each branch's type of predicate is a defined type. Then as described above, we evalute each branches in their local scopes which includes for each branch that branch's assignment. And lastly set the type of the case expression to the least common parent of all the branch types.
-  * Block
-   * We iterate and evalute the type of each expression in the block. In the end, we set the type of the block to the type of the last expression in the block.
-  * Let
-   * We eavluate type of the initialization in the assignment, if an initialization is provided. Then make sure the type declared for the assignment is an existing type, and a supperclass of the type of the initialization. Then as described aboev, modify the scope for the let body, in which we then evaluate the body and set the let expressions type to the body's type.
-  * +, -, *, / Operators
-   * We simply evaluate the type of each side expression, and check that both side expressions are of type Int. Then set the operator's type to Int as well.
-  * Negate
-   * Similar to operators, we compute type of expression, make sure it's an integer, and set negations type to integer.
-  * < and <= Comparators
-   * Similar to operators, we evaluate the type of both side-expressions, make sure they're both integers, and set the comparotor's type to boolean.
-  * = equality
-   * We evaluate the types of both side expressions. Make sure that if either is an int, bool, or str, that they other must be the same type. And then set the equality's type to boolean.
-  * Not, Comp
-   * We evaluate the type of the expression and make sure it is a boolean, and then set the type of the comp to boolean.
-  * Constants
-   * We set the constants type to the appropiate type in each case; i.e, integer, boolean, or string.
-  * New
-   * We verify the type given exists, and then set the new expression's type to that type.
-  * Isvoid, no_expr
-   * Simply set the isvoid expression's type to boolean, and no_expr's type to No_type.
-  * Object
-   * We simply set the expression's type to the type of the object.
-   * 
+	* Overview
+		* Expressions are traversed recurseively. As in, for the expression "x <- 3+2", we begin by type checking the entire expression, but we will need to type check "3+2" before we can complete the type check of the entire expression. This is achieved by having each expression take care of it's own semantic check. In other words, each expression is told to evaluate it's own type, and stores its own type. Sub expressions withen a parent expression will be required to evaluate and store their types as the parent is trying to compute its own type. Each type of expression has its own semantic method defined, which adheres to the cool manual.
+	* Assignment
+		* We simply make sure the variable is declared, and that the value expresion evalutes to the same type (or sub-type) as the variable's declared type. We set the type of the assignment to the variable type.
+	* Dispatch
+		* Some details that were described above are left out here. We evaluate the types of the parameters, determine the method to be dispatched, check for mathcing number and type of parameters as the method is defined to accept, evaluate type of the method body, and make sure the body evlautes to the same type as the method is supposed to return. We set the type of the dispatch to the return type of the method.
+	* If and While
+		* We make sure the predicate is boolean and evaluate types of the then/else clauses for if's and the body for while's. For if's we then set the type of the if to the least common parent of the then and else clause types. For while's we set the type to Object.
+	* Cases
+		* We iterate through the branches, make sure no 2 or more branches share the same type for the predicate (i.e. case x of x:Int=>expr; y:Int=>expr; esac : is not allowed since both branches share the Int type of predicate). Then we check that each branch's type of predicate is a defined type. Then as described above, we evalute each branches in their local scopes which includes for each branch that branch's assignment. And lastly set the type of the case expression to the least common parent of all the branch types.
+	* Block
+		* We iterate and evalute the type of each expression in the block. In the end, we set the type of the block to the type of the last expression in the block.
+	* Let
+		* We eavluate type of the initialization in the assignment, if an initialization is provided. Then make sure the type declared for the assignment is an existing type, and a supperclass of the type of the initialization. Then as described aboev, modify the scope for the let body, in which we then evaluate the body and set the let expressions type to the body's type.
+	* +, -, *, / Operators
+		* We simply evaluate the type of each side expression, and check that both side expressions are of type Int. Then set the operator's type to Int as well.
+	* Negate
+		* Similar to operators, we compute type of expression, make sure it's an integer, and set negations type to integer.
+	* < and <= Comparators
+		* Similar to operators, we evaluate the type of both side-expressions, make sure they're both integers, and set the comparotor's type to boolean.
+	* = equality
+		* We evaluate the types of both side expressions. Make sure that if either is an int, bool, or str, that they other must be the same type. And then set the equality's type to boolean.
+	* Not, Comp
+		* We evaluate the type of the expression and make sure it is a boolean, and then set the type of the comp to boolean.
+	* Constants
+		* We set the constants type to the appropiate type in each case; i.e, integer, boolean, or string.
+	* New
+		* We verify the type given exists, and then set the new expression's type to that type.
+	* Isvoid, no_expr
+		* Simply set the isvoid expression's type to boolean, and no_expr's type to No_type.
+	* Object
+		* We simply set the expression's type to the type of the object.
+		* 
 * Test Cases (mygood.cl and mybad.cl)
-  * Note
-   * Note that good.cl and bad.cl is a concatenation of many individual bad tests I tested. In other words, it's messy to look at the output as a whole. Moreover, bad.cl contains multiple tests that cause the checker to halt. Therefore, very few of the test cases will be seen by simply running ./mysemant bad.cl, the tests not being tested should be commented out so the other tests can be seen.
-  * What's Tested In bad.cl
-   * Main
-    * Lack of main class
-    * Lack of main method
-    * Multiple main methods
-    * Main method acceting parameters
-   * Inheritance:
-    * Inheriting from non-existant classes
-    * Overriding inherrited attributes
-    * Overriding methods with new return types
-    * Overriding methods with different number of or type of actuals (or both)
-    * Multiple attribute and method definitions within a class
-    * Multiple class definitions
-    * Inheritance from basic classes
-    * Inheritance Loops
-   * Method Signatures
-    * Methods returning non-existant types
-    * Methods accepting parameters of non-existant types
-    * Methods accepting parameters of SELF_TYPE
-    * Methods having multiple parameters of the same name
-   * Attribute
-    * Declaring attribues of non-existant types
-   * Expressions
-    * Assignment of wrong types (both in methods and attribute initializations and elsewhere)
-    * Testing if and while expressions with non-boolean predicates
-    * Testing case expression branch scoping
-    * Testing case with branch types of non-defined types
-    * Testing case with multiple branches of the same type
-   * Operators
-    * Testing the operators with wrong type's of left/right hand expressions
-   * Method
-    * Returning the wrong type
-   * Let
-    * Testing let scoping
-    * Testing trying to use undefined types in let assignments
-    * Assigning an expression of mismatching type in a let assignment
-   * New
-    * New with undefined type    * 
-   * 
-  * What's Tested in good.cl
-   * Basicly the opposite of everything above. Ther's a proper main class, proper inheritance graph, proper expressions and types and etc. Basicly good.cl contains a good main class and main method, all method signatures are proper (no duplicate names, no SELF_TYPE's, non non-existant parameter types), methods return proper types, all method overwrites are done correctly, all expressions proplery typed, semi-complicated yet correct inheritances, all used types declared, testing proper inheritance of features, proper scoping, etc. I included multiple "trick" cases; for example, having a case with branches that evaluate to type B and C, as the last expression of an expression block making up the body of a method of return type A, where A>B>C.
-	 
-	 
+	* Note
+		* Note that good.cl and bad.cl is a concatenation of many individual bad tests I tested. In other words, it's messy to look at the output as a whole. Moreover, bad.cl contains multiple tests that cause the checker to halt. Therefore, very few of the test cases will be seen by simply running ./mysemant bad.cl, the tests not being tested should be commented out so the other tests can be seen.
+	* What's Tested In bad.cl
+		* Main
+		* Lack of main class
+		* Lack of main method
+		* Multiple main methods
+		* Main method acceting parameters
+		* Inheritance:
+		* Inheriting from non-existant classes
+		* Overriding inherrited attributes
+		* Overriding methods with new return types
+		* Overriding methods with different number of or type of actuals (or both)
+		* Multiple attribute and method definitions within a class
+		* Multiple class definitions
+		* Inheritance from basic classes
+		* Inheritance Loops
+		* Method Signatures
+		* Methods returning non-existant types
+		* Methods accepting parameters of non-existant types
+		* Methods accepting parameters of SELF_TYPE
+		* Methods having multiple parameters of the same name
+		* Attribute
+		* Declaring attribues of non-existant types
+		* Expressions
+		* Assignment of wrong types (both in methods and attribute initializations and elsewhere)
+		* Testing if and while expressions with non-boolean predicates
+		* Testing case expression branch scoping
+		* Testing case with branch types of non-defined types
+		* Testing case with multiple branches of the same type
+		* Operators
+		* Testing the operators with wrong type's of left/right hand expressions
+		* Method
+		* Returning the wrong type
+		* Let
+		* Testing let scoping
+		* Testing trying to use undefined types in let assignments
+		* Assigning an expression of mismatching type in a let assignment
+		* New
+		* New with undefined type		* 
+		* 
+	* What's Tested in good.cl
+		* Basicly the opposite of everything above. Ther's a proper main class, proper inheritance graph, proper expressions and types and etc. Basicly good.cl contains a good main class and main method, all method signatures are proper (no duplicate names, no SELF_TYPE's, non non-existant parameter types), methods return proper types, all method overwrites are done correctly, all expressions proplery typed, semi-complicated yet correct inheritances, all used types declared, testing proper inheritance of features, proper scoping, etc. I included multiple "trick" cases; for example, having a case with branches that evaluate to type B and C, as the last expression of an expression block making up the body of a method of return type A, where A>B>C.
+		
+		
 ## Code Generation
 * A couple design decisions to note.
 
