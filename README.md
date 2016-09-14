@@ -1,6 +1,6 @@
 # CoolCompiler
 
-This was a project to implement a Compiler and Code Generator for the Cool programming language. (https://en.wikipedia.org/wiki/Cool_(programming_language))
+This was a project to implement a Compiler and Code Generator for the Cool programming language. Completed individually in Fall 2015. (https://en.wikipedia.org/wiki/Cool_(programming_language))
 
 ## OVERVIEW
 
