@@ -1,0 +1,238 @@
+README file for Programming Assignment 5  (Java edition)
+=======================================================
+
+Your directory should now contain the following files:
+
+ ASTConstants.java    [DO NOT MODIFY]
+ ASTLexer.java        [DO NOT MODIFY]
+ ASTParser.java       [DO NOT MODIFY]
+ AbstractSymbol.java  [DO NOT MODIFY]
+ AbstractTable.java   [DO NOT MODIFY]
+ BoolConst.java
+ Cgen.java            [DO NOT MODIFY]
+ CgenClassTable.java
+ CgenNode.java
+ CgenSupport.java
+ ClassTable.java      [DO NOT MODIFY]
+ Flags.java           [DO NOT MODIFY]
+ IdSymbol.java        [DO NOT MODIFY]
+ IdTable.java         [DO NOT MODIFY]
+ IntSymbol.java
+ IntTable.java        [DO NOT MODIFY]
+ ListNode.java        [DO NOT MODIFY]
+ build.xml            [DO NOT MODIFY]
+ README
+ StringSymbol.java
+ StringTable.java     [DO NOT MODIFY]
+ SymbolTable.java     [DO NOT MODIFY]
+ SymtabExample.java   [DO NOT MODIFY]
+ TokenConstants.java  [DO NOT MODIFY]
+ TreeConstants.java
+ TreeNode.java        [DO NOT MODIFY]
+ Utilities.java       [DO NOT MODIFY]
+ cool-tree.java
+ example.cl
+ tests
+         1.cl
+         2.cl
+         3.cl
+         4.cl
+         5.cl
+         6.cl
+         checkpoint.cl
+ mycoolc              [DO NOT MODIFY]
+ reference-coolc      [DO NOT MODIFY]
+ reference-cgen       [DO NOT MODIFY]
+ runmips              [DO NOT MODIFY]
+ trap_handler.mars    [DO NOT MODIFY]
+ coolc.jar            [DO NOT MODIFY]
+
+
+        The build.xml contains targets for compiling and running your
+        program, as well as handing it in. DO NOT MODIFY.
+
+        The README contains this info. Part of the assignment is to
+        fill the README with the write-up for your project. You should
+        explain design decisions, explain why your code is correct,
+        and why your test cases are adequate. It is part of the
+        assignment to clearly and concisely explain things in text as
+        well as to comment your code.
+
+        In example.cl, you should write a correct Cool program which
+        tests as many aspects of the code generator as possible. It
+        should pass your code generator, and running MARS on the
+        generated output should run the program correctly.
+
+        CgenClassTable.java and CgenNode.java are the skeleton files for
+        the code generator. These skeletons are much larger than the
+        ones for previous assignments.  The skeletons provides three
+        components of the code generator:
+
+                - functions to build the inheritance graph; (we supply
+                  this in case you didn't get this working for PA4)
+
+                - functions to emit global data and constants;
+
+        You should work to understand this code, and it will help you
+        write the rest of the code generator.
+
+        tests is a directory containing seven test cases.
+
+        TreeNode.java and ListNode.java contain definitions used by
+        the tree package. DO NOT MODIFY.
+
+        cool-tree.java specifies and give an implementation of Cool
+        ASTs (see the README for PA3 and the "Cool Tour").  In this
+        assignment, you will need to complete the code generating
+        methods for all Cool expression nodes.
+
+        BoolConst.java, IntSymbol.java, and StringSymbol.java are used
+        to manage constants in Cool programs.  You will need to
+        complete the method for generating constant definitions in
+        each of these classes.
+
+        CgenSupport.java is general support code for the code
+        generator.  You can add functions and constants as you see
+        fit, but do not modify anything that's already there.  This
+        class also serves as a placeholder for a bunch of constants as
+        well as functions to emit MARS instructions (we supply these
+        to save you some tedious coding).
+
+        TreeConstants.java defined some useful symbol constants.  You
+        may add some of your own, if you wish.
+
+        ASTLexer.java, ASTParser.java, and ASTConstants.java implement
+        a lexer and a parser for reading text representation of ASTs
+        from console in the format produced by the parser phase. DO
+        NOT MODIFY.
+
+        Cgen.java supplies the driver for the compiler. You should not
+        modify this code.  The script mycoolc can pass any of the
+        standard flags to the code generator; for this assignment, -c
+        (code generator debug) may be useful as it sets a global
+        variable cgen_debug to true (1).  If you want your code
+        generator to print debug information when the option is set,
+        write your debug code in the following format:
+
+              if (cgen_debug)
+              {
+                ...
+              }
+
+        SymbolTable.java contains a symbol table implementation. Read
+        the comments in the file and look at the example in
+        SymtabExample.java.  You are not required to use this code,
+        but you may find it useful. DO NOT MODIFY.
+
+Instructions
+------------
+
+        To compile your compiler and code generator type:
+
+        % ant cgen
+
+        To test your compiler, type:
+
+        % ./mycoolc [-o output filename] <file1.cl> <file2.cl> ...
+
+        This command parses all the cool files given on the command
+        line, passes them through the semantic checker, and then hands
+        the program AST to your code generator.
+
+        To run your compiler on the file example.cl, type:
+
+        % ant test
+
+        To run the produced code:
+
+        % runmips file1.s  /* or the output filename you chose */
+
+        To turn in your work at checkpoint, type:
+
+        % ant submit-clean
+        % submit PA5-checkpoint
+
+        To turn in your work finally, type:
+
+        % ant submit-clean
+        % submit PA5
+
+        Be sure to submit all relevant source files.
+        In particular, you probably want to turn in cool-tree.java,
+        TreeConstants.java, BoolConst.java, IntSymbol.java, StringSymbol.java,
+        CgenNode.java, CgenClassTable.java, CgenSupport.java, example.cl, README.
+
+        You may turn in the assignment as many times as you like.
+        However, only the last version will be retained for grading.
+
+        GOOD LUCK!
+
+---8<------8<------8<------8<---cut here---8<------8<------8<------8<---
+
+Write-up for PA5
+----------------
+
+PA 5 Checkpoint is late 3 days and 21 hours (93 hours total).
+I have used 7 of my 100 slip hours prior to this submission.
+That leaves me a total of 0 more slip hours.
+
+ant cgen
+./mycoolc
+./reference-coolc
+./compare-cgen
+./runmips
+ant submit-clean
+submit PA5
+
+The README contains this info. Part of the assignment is to
+fill the README with the write-up for your project. You should
+explain design decisions, explain why your code is correct,
+and why your test cases are adequate. It is part of the
+assignment to clearly and concisely explain things in text as
+well as to comment your code.
+
+A couple design decisions to note. We store multiple static maps in CgenClassTable to allow us to access information about our class organizations. Specifically, we have 1) a map mapping each class's method to the dispatch offset for that method in the class's dispatch table, 2) a map mapping each class's attributes to where the offset of that attribute on the object's heap space relative to the object, 3) a map mapping each class to the number of "offsprings" it has (i.e., class a -> # of a's children + # of a's grandchildren + # of a's great...), and 4) a vector that contains our classes ordered in the same order as their class tags are. The (3) and (4) are essential to our implementation of the type-case code generation, which we will explain below.
+
+Another decision we made was to pass in the following to each expression's code generation method: 1) the printstream so that output can be written to the output file. 2) The current class, so that SELF can be resolved as well as dispatchs that don't specify a left side expression. 3) A mapping of formals to where they're located on the stack point (relative to frame pointer). 4) A mapping of local variables (declared in let's and type cases) to where they are located on the stack pointer (relative to the frame pointer), and 5) fpOffset, a variable remembering how far apart the sp is from the fp, in order to allow us to record where on the stack (relative to the fp) we are storing local variables. fpOffset is incremented when something is pushed onto the stack, and decremented when something is popped off.
+
+The basic flow of code generation follows the comments given in the skeleton files.
+
+First, we decide which class should get which tag, i.e., we let Object have tag 0, Int 1, Bool 2, Str 3, etc. The important invariant we must maintain in doing so is that, all of class A's offspring (children, grandchildren, etc) have a class tag greater than class A, and that non-ancestor has a class tag that's greater than A's, but less than any of A's ancestors. For example, if class C1 and C2 inherit from B, and B and A both inherit from Parent, then this invariant insures that the class tag ordering will be either P, A, B, C1, C2 or P, B, C1, C2, A. This is very important for our implementation of tpe-case code generation.
+
+Second, we compute (and store in a map as described above) how many offspring each class has. This and the above are what allows our type-case implementations to work. Essentially, for the example above, if we chose class ordering P, B, C1, C2, A, then to check if object x is of type B, we just check if x's class tag is greater than or equal to B's, and less than or equal to C2's; if so, then x is a of type B or a decedent of B. The # of offspring mapping is required to easily compute the class tag of C2 when just given B's class tag.
+
+Third, we fill in the class object table, class dispatches sections, class prototypes sections, and object initializers as described in the runtime manual. For each of them, we simply iterate through the classes in order of their class tags and fill the appropiate sections. For fillign dispatch section for a given class, we recursivelly build off it's ancestors dispatch tables. Likewise for initializer sections.
+
+Lastly we fill in the code for all the methods of all the classes (except of course object, int, str, boolean, and io). This is straight forward if looked at recursively. We begin each method with a label, pushing fp, s0, ra to the stack, copying the a0 (self) to s0, then recursively generating the code for the body, popping back off the fp, s0, and ra from the stack, then popping off the passed in arguments from the stack, and lastly add a return statement.
+
+For computing the code for the actual body expressions, the general idea is as follows.
+
+For assign expressions, we check the local mapping (described above), then if not found the formals mapping (described above), then if still not found the class attribute mappings (described above). The location the identifier is, is where we store the value of $a0 (which was computed when recursively generating the code for the right hand expression).
+
+For dispatches, push arguments to the stack (after recursivelly computing them), then compute the left hand side (or assign it SELF if there is no left hand side provided), then check that it's not a void dispatch (if it is, we jump to _dispatch_abort after appropriating filename and linenumber), then jump to the dispatched mehod label, which we simply lookup in the class-method to method-offset-in-dispatch-table map.
+
+For static dispatches, we do the same, except we use the specified class when reffering to the the class-method to method-offset-in-dispatch-table map, instead of using the class of the left hand side expression.
+
+For if expressions, we compute the predicate expr, then the then or else expr depending on the predicate.
+
+For loops, we compute the predicate, then the body (if predicate was true) and repeat until predicate is false.
+
+For type cases, we described the general idea above. The bigger idea is, check if the expression is null, check which case it matches to if not null (_case_abort2 if s), add the mathcing branch identifier to local map, compute the branch expressin, and then check if no branches matched (_case_abort if so).
+
+For blocks, we simply iterate through the expressions, and compute each seperately.
+
+For Let, we compute the assignment (if one was not provided, then just use the default value appropiate for the type of identifer), store the identifier to the local mapping (and stack), use this local mapping in computing the expression, then remove the identifier from the local mapping (and stack).
+
+For +, -, /, * operators, we comute the each side expression, copy one of the integer objects that resulted, modify it's value to the result of the appropriate operation, and keep this resulting object in $a0.
+
+For comparisons, we do something similar to what we did for the operators. We compute the side expressions, compute the comparison, and jump appropriately depending on if the comparison was true or false, returning false or true depending on where we jumped.
+
+String, boolean, and int constants simply load the appropiate constant to $a0.
+
+New simply determines the prototype object address, copy the prototype object, jump to the initialization section of the object, and keeps that object in $a0.
+
+Isvoid is basicly just like the other comparetors except it compares the given expression result to 0.
+
+noexpr generates no code.
+
+And identifiers do the same as assignments, excpet they load instead of storing from/to the appropiate location. In addition, identifiers also check for SELF, and if so, load $s0 to the result ($a0).
